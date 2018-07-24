@@ -1,16 +1,36 @@
 ﻿namespace PhotoShare.Client.Core.Commands
 {
+    using PhotoShare.Client.Core.Commands.Contracts;
+    using PhotoShare.Services;
+    using PhotoShare.Services.Contracts;
     using System;
 
-    public class ShareAlbumCommand
+    public class ShareAlbumCommand:ICommand
     {
-        // ShareAlbum <albumId> <username> <permission>
-        // For example:
-        // ShareAlbum 4 dragon321 Owner
-        // ShareAlbum 4 dragon11 Viewer
-        public string Execute()
+        private readonly IAlbumService albumService;
+        private readonly IUserService userService;
+
+        public ShareAlbumCommand(IAlbumService albumService, IUserService userService)
         {
-            throw new NotImplementedException();
+            this.albumService = albumService;
+            this.userService = userService;
+        }
+
+        public string Execute(string[] commandArgs)
+        {
+            var albumId = int.Parse(commandArgs[0]);
+            var username = commandArgs[1];
+            var permission = commandArgs[2];
+
+
+            if (!Session.HasLoggedUser())
+            {
+                throw new InvalidOperationException(ExeptionMessageHandler.InvalidCredentialsExeption);
+            }
+
+            var credentialUser = Session.User;
+
+            return this.albumService.ShareAlbum(albumId,username,permission, credentialUser);
         }
     }
 }

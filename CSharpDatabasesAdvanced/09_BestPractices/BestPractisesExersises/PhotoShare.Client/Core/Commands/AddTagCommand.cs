@@ -3,25 +3,33 @@
     using Models;
     using Data;
     using Utilities;
+    using PhotoShare.Services.Contracts;
+    using PhotoShare.Client.Core.Commands.Contracts;
+    using System;
+    using PhotoShare.Services;
 
-    public class AddTagCommand
+    public class AddTagCommand:ICommand
     {
-        // AddTag <tag>
+        private ITagService tagService;
+        private const string successMessage = " Tag {0} was added successfully to database!";
+
+        public AddTagCommand(ITagService tagService)
+        {
+            this.tagService = tagService;
+        }
+
         public string Execute(string[] data)
         {
-            string tag = data[1].ValidateOrTransform();
+            var tagName = data[0];
 
-            using (PhotoShareContext context = new PhotoShareContext())
+            if (!Session.HasLoggedUser())
             {
-                context.Tags.Add(new Tag
-                {
-                    Name = tag
-                });
-
-                context.SaveChanges();
+                throw new InvalidOperationException(ExeptionMessageHandler.InvalidCredentialsExeption);
             }
 
-            return tag + " was added successfully to database!";
+            this.tagService.Create(tagName);
+
+            return string.Format(successMessage,"#"+tagName);
         }
     }
 }

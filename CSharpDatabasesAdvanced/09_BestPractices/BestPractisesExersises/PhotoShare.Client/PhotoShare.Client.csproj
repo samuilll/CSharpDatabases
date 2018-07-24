@@ -6,8 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PhotoShare.Data\PhotoShare.Data.csproj" />
-    <ProjectReference Include="..\PhotoShare.Models\PhotoShare.Models.csproj" />
+    <PackageReference Include="Microsoft.EntityframeworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PhotoShare.Services\PhotoShare.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contracts\" />
   </ItemGroup>
 
 </Project>

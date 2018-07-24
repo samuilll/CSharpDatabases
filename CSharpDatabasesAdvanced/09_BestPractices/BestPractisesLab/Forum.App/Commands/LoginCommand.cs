@@ -18,14 +18,14 @@ namespace Forum.App.Commands
             var username = arguments[0];
             var password = arguments[1];
 
-            var User = userService.ByUsernameAndPassword(username, password);
+            var user = userService.ByUsernameAndPassword(username, password);
 
-            if (User==null)
+            if (user==null)
             {
                 return "Invalid username or password";
             }
 
-            Session.User = User;
+            Session.User = user;
 
             return $"Logged in successfully";
         }

@@ -19,11 +19,14 @@
                 .IsUnique();
 
             builder.Property(e => e.Password)
-                .IsRequired();
+                .IsRequired();              
 
             builder.Property(e => e.Email)
                 .HasMaxLength(80)
                 .IsRequired();
+
+            builder.HasIndex(u => u.Email).IsUnique(true);
+
 
             builder.Property(e => e.FirstName)
                 .IsRequired(false)

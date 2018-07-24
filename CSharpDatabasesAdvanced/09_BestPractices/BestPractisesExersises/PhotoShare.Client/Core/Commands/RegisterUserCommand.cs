@@ -1,40 +1,26 @@
 ﻿namespace PhotoShare.Client.Core.Commands
 {
-    using System;
+    using PhotoShare.Client.Core.Commands.Contracts;
+    using PhotoShare.Services;
+    using PhotoShare.Services.Contracts;
 
-    using Models;
-    using Data;
-
-    public class RegisterUserCommand
+    public class RegisterUserCommand:ICommand
     {
-        // RegisterUser <username> <password> <repeat-password> <email>
+        private readonly IUserService userService;
+
+        public RegisterUserCommand(IUserService userService)
+        {
+            this.userService = userService;
+        }
+
         public string Execute(string[] data)
         {
-            string username = data[0];
-            string password = data[1];
-            string repeatPassword = data[2];
-            string email = data[3];
-
-            if (password == repeatPassword)
+            if (Session.HasLoggedUser())
             {
-                throw new ArgumentException("Passwords do not match!");
+                throw new InvalidOperationExeption(ExeptionMessageHandler.InvalidCredentialsExeption);
             }
 
-            User user = new User
-            {
-                Username = username,
-                Password = password,
-                Email = email,
-                IsDeleted = false,
-                RegisteredOn = DateTime.Now,
-                LastTimeLoggedIn = DateTime.Now
-            };
-
-            using (PhotoShareContext context = new PhotoShareContext())
-            {
-                context.Users.Add(user);
-                context.SaveChanges();
-            }
+            var user = this.userService.Create(data);
 
             return "User " + user.Username + " was registered successfully!";
         }

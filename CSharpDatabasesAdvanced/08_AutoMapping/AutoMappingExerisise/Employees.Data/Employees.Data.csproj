@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20180723195821_manager.cs" />
+    <Compile Remove="Migrations\20180723200021_manager.cs" />
+    <Compile Remove="Migrations\20180723200115_manager.cs" />
+    <Compile Remove="Migrations\20180723202005_Manager3.cs" />
+    <Compile Remove="Migrations\20180723202802_Manager3.cs" />
+    <Compile Remove="Migrations\20180723204120_Manager3.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Employees.Models\Employees.Models.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -3,6 +3,7 @@ using System.Linq;
 using Forum.Data;
 using Forum.Data.Models;
 using Forum.Services.Contracts;
+using AutoMapper.QueryableExtensions;
 
 namespace Forum.Services
 {
@@ -15,13 +16,14 @@ namespace Forum.Services
             this.context = context;
         }
 
-        public IEnumerable<Post> All()
+        public IQueryable<T> All<T>()
         {
             var posts = context.Posts
-                .ToArray();
+                .ProjectTo<T>();
 
             return posts;
         }
+
 
         public Post ById(int postId)
         {

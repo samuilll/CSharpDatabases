@@ -4,6 +4,10 @@ using Forum.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using AutoMapper;
+using AutoMapper.Configuration;
+using Forum.App.Models;
+using Forum.Data.Models;
 
 namespace Forum.App
 {
@@ -12,6 +16,8 @@ namespace Forum.App
         static void Main(string[] args)
         {
             var serviceProvider = ConfigureService();
+
+            InitializeMapper();
 
             var engine = new Engine(serviceProvider);
 
@@ -33,9 +39,17 @@ namespace Forum.App
             serviceCollection.AddDbContext<ForumDbContext>(options =>
             options.UseLazyLoadingProxies().UseSqlServer(Configuration.ConnectionbString));
 
+          //  serviceCollection.AddAutoMapper(cfg => cfg.AddProfile<ForumProfile>());
+
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             return serviceProvider;
         }
+
+        private static void InitializeMapper()
+        {
+            Mapper.Initialize(cfg => cfg.AddProfile<ForumProfile>());
+        }
+
     }
 }

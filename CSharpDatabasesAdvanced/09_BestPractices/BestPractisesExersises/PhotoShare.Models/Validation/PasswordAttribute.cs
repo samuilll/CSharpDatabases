@@ -35,6 +35,7 @@
 
             if (this.ContainsLowercase && !password.Any(c => char.IsLower(c)))
             {
+                 
                 return false;
             }
 

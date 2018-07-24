@@ -1,6 +1,7 @@
 ﻿using Forum.Data;
 using Forum.Data.Models;
 using Forum.Services.Contracts;
+using AutoMapper;
 
 namespace Forum.Services
 {
@@ -12,7 +13,7 @@ namespace Forum.Services
         {
             this.context = context;
         }
-        public Reply Create( int postId, int authorId, string replyText)
+        public TModel Create<TModel>( int postId, int authorId, string replyText)
         {
             var reply = new Reply
             {
@@ -25,7 +26,7 @@ namespace Forum.Services
 
             context.SaveChanges();
 
-            return reply;
+            return Mapper.Map<TModel>(reply);
         }
 
         public void Delete(int replyId)

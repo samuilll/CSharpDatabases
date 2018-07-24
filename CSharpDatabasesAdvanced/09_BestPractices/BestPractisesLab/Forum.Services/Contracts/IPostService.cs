@@ -1,6 +1,7 @@
 ﻿using Forum.Data.Models;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Forum.Services.Contracts
 {
@@ -9,8 +10,7 @@ namespace Forum.Services.Contracts
         Post Create(string title,
             string content, int categoryId, int authorId);
 
-        IEnumerable<Post> All();
-
+        IQueryable<T> All<T>();
 
         Post ById(int postId);
     }

@@ -17,7 +17,7 @@ namespace P01_BillsPaymentSystem
                 manager.ResetDatabase();
 
                 manager.PayBills(1, 266000);
-               //  new Engine().Run(db);             
+                 new Engine().Run(db);             
             }
            
         }

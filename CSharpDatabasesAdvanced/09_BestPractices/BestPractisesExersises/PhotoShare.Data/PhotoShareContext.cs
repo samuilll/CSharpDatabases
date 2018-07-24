@@ -4,6 +4,9 @@ namespace PhotoShare.Data
 
     using Models;
     using Configuration;
+    using System.Linq;
+    using System.ComponentModel.DataAnnotations;
+    using System.Collections.Generic;
 
     public class PhotoShareContext : DbContext
     { 
@@ -50,6 +53,37 @@ namespace PhotoShare.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(ServerConfig.ConnectionString);
+        }
+
+        public override int SaveChanges()
+        {
+            var entities = this.ChangeTracker.Entries().Where(e=>e.State==EntityState.Modified|| e.State == EntityState.Added)
+                .Select(e=>e.Entity).ToList();
+
+            foreach (var entity in entities)
+            {
+                try
+                {
+                    Validate(entity);
+                }
+                catch (ValidationException e)
+                {
+                    this.Entry(entity).State = EntityState.Detached;
+                    throw  new ValidationException(e.Message);
+                }
+            }
+            return base.SaveChanges();
+        }
+
+        private void  Validate(object entity)
+        {
+            var validationContext = new ValidationContext(entity);
+
+
+            Validator.ValidateObject(
+                entity,
+                validationContext,
+                validateAllProperties: true);
         }
     }
 }

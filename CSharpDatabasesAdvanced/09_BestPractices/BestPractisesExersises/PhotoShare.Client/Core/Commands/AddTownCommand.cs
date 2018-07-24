@@ -2,28 +2,33 @@
 {
     using Models;
     using Data;
+    using PhotoShare.Client.Core.Commands.Contracts;
+    using System;
+    using PhotoShare.Services;
+    using PhotoShare.Services.Contracts;
 
-    public class AddTownCommand
+    public class AddTownCommand:ICommand
     {
-        // AddTown <townName> <countryName>
+        private readonly ITownService townService;
+
+        private readonly string successResult = "Town {0} was added successfully!";
+
+
+        public AddTownCommand(ITownService townService)
+        {
+            this.townService = townService;
+        }
+
         public string Execute(string[] data)
         {
-            string townName = data[1];
-            string country = data[0];
-
-            using (PhotoShareContext context = new PhotoShareContext())
+            if (!Session.HasLoggedUser())
             {
-                Town town = new Town
-                {
-                    Name = townName,
-                    Country = country
-                };
-
-                context.Towns.Add(town);
-                context.SaveChanges();
-
-                return townName + " was added to database!";
+                throw new InvalidOperationException(ExeptionMessageHandler.InvalidCredentialsExeption);
             }
+
+            var town = this.townService.Create(data);
+
+            return string.Format(successResult,town.Name);        
         }
     }
 }

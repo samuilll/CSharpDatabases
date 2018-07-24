@@ -1,9 +1,10 @@
-﻿using Forum.App.Commands.Contracts;
+﻿using System.Linq;
+using Forum.App.Commands.Contracts;
 using Forum.Data.Models;
 using Forum.Services.Contracts;
-using System;
-using System.Collections.Generic;
 using System.Text;
+using AutoMapper;
+using Forum.App.Models;
 
 namespace Forum.App.Commands
 {
@@ -24,11 +25,13 @@ namespace Forum.App.Commands
 
             Post post = postService.ById(postId);
 
-            sb.AppendLine($"{post.Title} by {post.Author.Username}");
+            var postDetailsDto = Mapper.Map<PostDetailsDto>(post);
+          
+            sb.AppendLine($"{postDetailsDto.Title} by {postDetailsDto.AuthorUserName}");
 
-            foreach (var reply in post.Replies)
+            foreach (var reply in postDetailsDto.Replies)
             {
-                sb.AppendLine($"-{reply.Content} by {reply.Author.Username}");
+                sb.AppendLine($"-{reply.Content} by {reply.AuthorUserName}");
             }
             return sb.ToString().TrimEnd('\n','\r');
         }
