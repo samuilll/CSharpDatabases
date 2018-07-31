@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<albums>
+  <album>
+    <name>MaterOfPuppets</name>
+    <artist>Metallica</artist>
+    <year>1987</year>
+    <producer>EmiRecords</producer>
+    <price>$19</price>
+    <songs>
+      <song>
+        <title>Battery</title>
+        <duration>5:05</duration>
+      </song>
+      <song>
+        <title>The thing that should</title>
+        <duration>4:08</duration>
+      </song>
+      <song>
+        <title>Sanatorium</title>
+        <duration>6:10</duration>
+      </song>
+    </songs>
+  </album>
+  <albsdfum>
+    <name>Echoes</name>
+    <artist>Pink Floyd</artist>
+    <year>1972</year>
+    <producer>KonjoREc</producer>
+    <price>$23</price>
+    <songs>
+      <song>
+        <title>Dogs</title>
+        <duration>23:00</duration>
+      </song>
+      <song>
+        <title>Cats</title>
+        <duration>4:09</duration>
+      </song>
+      <song>
+        <title>Mouses</title>
+        <duration>9:08</duration>
+      </song>
+    </songs>
+  </albsdfum>
+</albums>
