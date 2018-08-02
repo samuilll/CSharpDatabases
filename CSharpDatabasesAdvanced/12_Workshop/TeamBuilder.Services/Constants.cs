@@ -49,9 +49,16 @@ namespace TeamBuilder.Services
             public const string GenderNotValid = "Gender should be either “Male” or “Female”!";
             public const string UsernameIsTaken = "Username {0} is already taken!";
             public const string UserOrPasswordIsInvalid = "Invalid username or password!";
+            public const string CannotAddTheSameTeamTwice = "Cannot add same team twice!";
+
+
+            public const string CannotDeleteCreatorOfTheTeam = "Command not allowed. Use DisbandTeam instead.";
 
             public const string InvalidDateFormat =
                                       "Please insert the dates in format: [dd/MM/yyyy HH:mm]!";
+
+            public const string StartDateMustPrecedeEndDate =
+                                     "Start date should be before end date.";
 
             // Team error messages.
             public const string InvalidAcronym = "Acronym {0} not valid!";
@@ -67,7 +74,6 @@ namespace TeamBuilder.Services
             public const string LogOutSuccessfull = "User {0} successfully logged out!";
 
             public const string DeleteSuccessfull = "User {0} was deleted successfully!";
-
         }
     }
 

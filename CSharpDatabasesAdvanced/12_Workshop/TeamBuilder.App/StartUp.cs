@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using TeamBuilder.App.Contracts;
 using TeamBuilder.Models;
 using TeamBuilder.Services;
@@ -12,33 +14,34 @@ namespace TeamBuilder.App
 {
     class StartUp
     {
-       public static void Main(string[] args)
+        public static void Main(string[] args)
         {
-                var serviceProvider = ConfigureServices();
+            var serviceProvider = ConfigureServices();
 
-                var engine = new Engine(serviceProvider);
+             var engine = new Engine(serviceProvider);
 
-                engine.Run();
-            }
+             engine.Run();
+        }
 
-            private static IServiceProvider ConfigureServices()
-            {
-                var services = new ServiceCollection();
+        private static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
 
-                services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
+            services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
+            services.AddSingleton<IDatabaseInitializeService, DatabaseInitializeService>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IEventService, EventService>();
+            services.AddSingleton<ITeamService, TeamService>();
 
-                services.AddSingleton<IDatabaseInitializeService, DatabaseInitializeService>();
 
-                services.AddSingleton<IUserService, UserService>();
+            var mapper = CreateConfiguration();
 
-                var mapper = CreateConfiguration();
+            services.AddSingleton<IMapper>(mapper);
 
-                services.AddSingleton<IMapper>(mapper);
+            var provider = services.BuildServiceProvider();
 
-                var provider = services.BuildServiceProvider();
-
-                return provider;
-            }
+            return provider;
+        }
 
         private static IMapper CreateConfiguration()
         {

@@ -65,14 +65,14 @@ namespace TeamBuilder.Services
         {
             var username = args[0];
 
-            if (!Validation.StringValidation(username, Constants.MinUsernameLength, Constants.MaxUsernameLength))
+            if (!Validation.IsStringValid(username, Constants.MinUsernameLength, Constants.MaxUsernameLength))
             {
                 throw new ArgumentException(string.Format(Constants.ErrorMessages.UsernameNotValid, username));
             }
 
             var password = args[1];
 
-            if (!Validation.StringValidation(password, Constants.MinPasswordLength, Constants.MaxPasswordLength))
+            if (!Validation.IsStringValid(password, Constants.MinPasswordLength, Constants.MaxPasswordLength))
             {
                 throw new ArgumentException(string.Format(Constants.ErrorMessages.PasswordNotValid, password));
             }
@@ -146,7 +146,7 @@ namespace TeamBuilder.Services
         {
             ShouldLogIn();
 
-            var username = AuthenticationManager.GetCurrentUser().Username;
+            var username = AuthenticationManager.GetCurrentUser(new TeamBuilderContext()).Username;
 
             AuthenticationManager.Logout();
 
@@ -164,21 +164,22 @@ namespace TeamBuilder.Services
         public string DeleteUser()
         {
             ShouldLogIn();
-
-            var user = AuthenticationManager.GetCurrentUser();
+            using (var db = new TeamBuilderContext())
+            {
+             var user = AuthenticationManager.GetCurrentUser(db);
 
             AuthenticationManager.Logout();
 
-            using (var db =new TeamBuilderContext())
-            {
+           
                 var userToDelete = db.Users.Find(user.Id);
 
                 userToDelete.IsDeleted = true;
 
                 db.SaveChanges();
+
+                return user.Username;
             }
 
-            return user.Username;
         }
     }
 }

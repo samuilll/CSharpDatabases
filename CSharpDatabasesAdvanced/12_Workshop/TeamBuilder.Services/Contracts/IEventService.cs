@@ -7,5 +7,7 @@ namespace TeamBuilder.Services.Contracts
    public interface IEventService
     {
         TModel CreateEvent<TModel>(params string[] arguments);
+
+        string ShowEvent(string eventName);
     }
 }

@@ -10,7 +10,7 @@
         {
             using (var db = new TeamBuilderContext())
             {
-               // db.Database.EnsureDeleted();
+                db.Database.EnsureDeleted();
 
                 db.Database.Migrate();
             }

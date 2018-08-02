@@ -11,6 +11,7 @@ namespace TeamBuilder.App.Core.Commands
 
     public class CreateEventCommand : ICommand
     {
+        private const string successfullMessage = "Event {0} was created successfully!"; 
 
         private IEventService eventService;
 
@@ -21,7 +22,14 @@ namespace TeamBuilder.App.Core.Commands
 
         public string Execute(params string[] commandArgs)
         {
-            throw new ArgumentException();
+            if (commandArgs.Length!= 6)
+            {
+                throw new ArgumentException(Constants.ErrorMessages.InvalidArgumentsCount);
+            }
+
+            EventDto eventDto = this.eventService.CreateEvent<EventDto>(commandArgs);
+
+            return string.Format(successfullMessage,eventDto.Name);
         }
     }
 }

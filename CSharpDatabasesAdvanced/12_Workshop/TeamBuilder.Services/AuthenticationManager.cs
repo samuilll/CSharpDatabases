@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using TeamBuilder.Data;
 using TeamBuilder.Models;
 
 namespace TeamBuilder.Services
@@ -26,9 +28,10 @@ namespace TeamBuilder.Services
         {
             return User != null;
         }// – returns true if there is logged in user else returns false
-        public static User GetCurrentUser()
+        public static User GetCurrentUser(TeamBuilderContext context)
         {
-            return User;
+
+            return context.Users.FirstOrDefault(u=>u.Id == User.Id);
         }// – gets currently logged in user if there is not throws exception
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace TeamBuilder.Models
 {
@@ -25,5 +26,20 @@ namespace TeamBuilder.Models
         public virtual ICollection<TeamEvent> EventTeams { get; set; }
 
         public virtual ICollection<Invitation> Invitations { get; set; }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"{this.Name} {this.Acronym}");
+
+            sb.AppendLine("Members:");
+
+            foreach (var tm in this.UserTeams)
+            {
+                sb.AppendLine($"{tm.User.Username}");
+            }
+            return sb.ToString().TrimEnd('\r','\n');
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace TeamBuilder.Services
                 validateAllProperties: true);
         }
 
-        public static bool StringValidation(string value,int minLength, int maxLength)
+        public static bool IsStringValid(string value,int minLength, int maxLength)
         {
             if (value.Length<minLength || value.Length>maxLength)
             {
