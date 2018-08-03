@@ -1,12 +1,18 @@
 ﻿namespace TeamBuilder.App
 {
     using System;
+    using System.IO;
+    using System.Text;
     using TeamBuilder.App.Contracts;
     using TeamBuilder.Services.Contracts;
+
+
 
     public class Engine
     {
         private IServiceProvider serviceProvider;
+
+        private StringBuilder sb = new StringBuilder();
 
         private readonly CommandDispatcher commandDispatcher;
 
@@ -21,10 +27,13 @@
 
         public void Run()
         {
-            this.databaseInitializeService.InitializeDatabase();
+             this.databaseInitializeService.InitializeDatabase();
 
-            while (true)
+            string result=string.Empty;
+
+            while (result!=null)
             {
+
                 try
                 {
                     Console.WriteLine("Please choose command:");
@@ -34,27 +43,34 @@
                     Console.ForegroundColor = ConsoleColor.Red;
                     string[] data = input.Split(' ');
 
-                    string result = this.commandDispatcher.DispatchCommand(data);
+                    result = this.commandDispatcher.DispatchCommand(data);
 
                     Console.WriteLine(result);
+    
+                    sb.AppendLine(result);
                     Console.ResetColor();
                 }
                 catch (InvalidOperationException e)
                 {
+                    sb.AppendLine(e.Message);
                     Console.WriteLine(e.Message);
                     Console.ResetColor();
                 }
                 catch (ArgumentException e)
                 {
+                    sb.AppendLine(e.Message);
                     Console.WriteLine(e.Message);
                     Console.ResetColor();
                 }
                 catch (Exception e)
                 {
+                    sb.AppendLine(e.Message);
                     Console.WriteLine(e.Message);
                     Console.ResetColor();
                 }
             }
+
+            File.WriteAllText("../output.txt",sb.ToString());
         }
     }
 }

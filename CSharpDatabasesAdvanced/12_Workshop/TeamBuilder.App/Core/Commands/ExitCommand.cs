@@ -9,9 +9,7 @@ namespace TeamBuilder.App.Core.Commands
     {
         public string Execute(params string[] commandArgs)
         {
-            Environment.Exit(0);
-
-            return string.Empty;
+            return null;
         }
     }
 }

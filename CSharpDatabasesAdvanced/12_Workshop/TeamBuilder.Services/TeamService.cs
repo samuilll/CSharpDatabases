@@ -36,17 +36,17 @@ namespace TeamBuilder.Services
         {
             using (var context = new TeamBuilderContext())
             {
-                LoginCheck();
+                Utility.LoginCheck();
 
                 var currentTeam = context.Teams.SingleOrDefault(t => t.Name == teamName);
 
-                ExistingTeamCheck(teamName, currentTeam);
+                Utility.ExistingTeamCheck(teamName, currentTeam);
 
                 var currentUser = AuthenticationManager.GetCurrentUser(context);
 
                 var invitation = currentUser.ReceivedInvitations.FirstOrDefault(i => i.IsActive && i.Team.Id == currentTeam.Id);
 
-                ExistingInvitationCheck(teamName, invitation);
+                Utility.ExistingInvitationCheck(teamName, invitation);
 
                 invitation.IsActive = false;
 
@@ -91,7 +91,7 @@ namespace TeamBuilder.Services
                     throw new ArgumentException(string.Format(Constants.ErrorMessages.InvalidAcronym, acronym));
                 }
 
-                LoginCheck();
+                Utility.LoginCheck();
 
                 var creatorId = AuthenticationManager.GetCurrentUser(context).Id;
 
@@ -122,7 +122,7 @@ namespace TeamBuilder.Services
         {
             using (var context = new TeamBuilderContext())
             {
-                LoginCheck();
+                Utility.LoginCheck();
 
                 var currentUser = AuthenticationManager.GetCurrentUser(context);
 
@@ -190,11 +190,11 @@ namespace TeamBuilder.Services
         {
             using (var context = new TeamBuilderContext())
             {
-                LoginCheck();
+                Utility.LoginCheck();
 
                 var currentTeam = context.Teams.SingleOrDefault(t => t.Name == teamName);
 
-                ExistingTeamCheck(teamName, currentTeam);
+                Utility.ExistingTeamCheck(teamName, currentTeam);
 
                 var currentUser = AuthenticationManager.GetCurrentUser(context);
 
@@ -217,13 +217,13 @@ namespace TeamBuilder.Services
         {
             using (var context = new TeamBuilderContext())
             {
-                LoginCheck();
+                Utility.LoginCheck();
 
                 var team = context.Teams.FirstOrDefault(t => t.Name == teamName);
-                ExistingTeamCheck(teamName, team);
+                Utility.ExistingTeamCheck(teamName, team);
 
                 var userToKick = context.Users.FirstOrDefault(u => u.Username == userName);
-                ExistingUserCheck(userName, userToKick);
+                Utility.ExistingUserCheck(userName, userToKick);
 
                 var isTeamMember = team.UserTeams.Any(ut => ut.User.Id == userToKick.Id);
                 if (!isTeamMember)
@@ -233,7 +233,7 @@ namespace TeamBuilder.Services
 
                 var currentUser = AuthenticationManager.GetCurrentUser(context);
 
-                IsCreatorCheck(team, currentUser);
+                Utility.IsCreatorCheck(team, currentUser);
 
                 if (currentUser.Id == userToKick.Id)
                 {
@@ -250,91 +250,27 @@ namespace TeamBuilder.Services
             }
         }
 
-        private static void ExistingUserCheck(string userName, User userToKick)
-        {
-            if (userToKick == null)
-            {
-                throw new ArgumentException(string.Format(Constants.ErrorMessages.UserNotFound, userName));
-            }
-        }
-
-        private static void LoginCheck()
-        {
-            if (!AuthenticationManager.IsAuthenticated())
-            {
-                throw new InvalidOperationException(Constants.ErrorMessages.LoginFirst);
-            }
-        }
-
-        private static void ExistingInvitationCheck(string teamName, Invitation invitation)
-        {
-            if (invitation == null)
-            {
-                throw new ArgumentException(string.Format(Constants.ErrorMessages.InviteNotFound, teamName));
-            }
-        }
-
-        private static void ExistingTeamCheck(string teamName, Team currentTeam)
-        {
-            if (currentTeam == null)
-            {
-                throw new ArgumentException(string.Format(Constants.ErrorMessages.TeamNotFound, teamName));
-            }
-        }
-
-        public string Disband(string teamName)
-        {
-            using (var context = new TeamBuilderContext())
-            {
-                LoginCheck();
-
-                var team = context.Teams.FirstOrDefault(t => t.Name == teamName);
-
-                ExistingTeamCheck(teamName, team);
-
-                var currentUser = AuthenticationManager.GetCurrentUser(context);
-
-                IsCreatorCheck(team, currentUser);
-
-                context.Teams.Remove(team);
-
-                context.SaveChanges();
-            }
-
-            return string.Format(disbandMessage, teamName);
-        }
-
-        private static void IsCreatorCheck(Team team, User currentUser)
-        {
-            var isCreator = currentUser.Id == team.CreatorId;
-
-            if (!isCreator)
-            {
-                throw new InvalidOperationException(Constants.ErrorMessages.NotAllowed);
-            }
-        }
-
         public string AddTeamTo(string eventName, string teamName)
         {
             using (var context = new TeamBuilderContext())
             {
-                LoginCheck();
+                Utility.LoginCheck();
 
                 var currentEvent = context
                     .Events
-                    .Where(e=>e.Name==eventName)
+                    .Where(e => e.Name == eventName)
                     .OrderByDescending(e => e.StartDate)
                     .FirstOrDefault();
-                ExistingEventCheck(eventName, currentEvent);
+                Utility.ExistingEventCheck(eventName, currentEvent);
 
                 var team = context.Teams.FirstOrDefault(t => t.Name == teamName);
-                ExistingTeamCheck(teamName, team);
+                Utility.ExistingTeamCheck(teamName, team);
 
                 var currentUser = AuthenticationManager.GetCurrentUser(context);
 
-                IsCreatorCheck(team, currentUser);
+                Utility.IsCreatorCheck(team, currentUser);
 
-                IsTeamAlreadyAddedCheck(currentEvent, team);
+                Utility.IsTeamAlreadyAddedCheck(currentEvent, team);
 
                 context.TeamEvents.Add(new TeamEvent
                 {
@@ -348,22 +284,26 @@ namespace TeamBuilder.Services
             return string.Format(addTeamToEvent, teamName, eventName);
         }
 
-        private static void IsTeamAlreadyAddedCheck(Event currentEvent, Team team)
+        public string Disband(string teamName)
         {
-            var isEventAlreadyAdded = currentEvent.EventTeams.Any(et => et.Team.Id == team.Id);
-
-            if (isEventAlreadyAdded)
+            using (var context = new TeamBuilderContext())
             {
-                throw new InvalidOperationException(Constants.ErrorMessages.CannotAddSameTeamTwice);
-            }
-        }
+                Utility.LoginCheck();
 
-        private static void ExistingEventCheck(string eventName, Event currentEvent)
-        {
-            if (currentEvent == null)
-            {
-                throw new ArgumentException(string.Format(Constants.ErrorMessages.EventNotFound, eventName));
+                var team = context.Teams.FirstOrDefault(t => t.Name == teamName);
+
+                Utility.ExistingTeamCheck(teamName, team);
+
+                var currentUser = AuthenticationManager.GetCurrentUser(context);
+
+                Utility.IsCreatorCheck(team, currentUser);
+
+                context.Teams.Remove(team);
+
+                context.SaveChanges();
             }
+
+            return string.Format(disbandMessage, teamName);
         }
 
         public string ShowTeam(string teamName)
@@ -372,10 +312,11 @@ namespace TeamBuilder.Services
             {
                 var team = context.Teams.FirstOrDefault(t => t.Name == teamName);
 
-                ExistingTeamCheck(teamName,team);
+                Utility.ExistingTeamCheck(teamName, team);
 
                 return team.ToString();
             }
         }
+   
     }
 }

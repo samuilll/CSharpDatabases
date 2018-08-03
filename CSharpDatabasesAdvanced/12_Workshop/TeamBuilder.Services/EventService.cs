@@ -85,10 +85,7 @@ namespace TeamBuilder.Services
                     .OrderByDescending(e => e.StartDate)
                     .FirstOrDefault();
 
-                if (currentEvent == null)
-                {
-                    throw new ArgumentException(string.Format(Constants.ErrorMessages.EventNotFound, eventName));
-                }
+                Utility.ExistingEventCheck(eventName, currentEvent);
 
                 return currentEvent.ToString();
             }

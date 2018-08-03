@@ -37,7 +37,7 @@ namespace TeamBuilder.Models
 
             foreach (var tm in this.UserTeams)
             {
-                sb.AppendLine($"{tm.User.Username}");
+                sb.AppendLine($"--{tm.User.Username}");
             }
             return sb.ToString().TrimEnd('\r','\n');
         }
