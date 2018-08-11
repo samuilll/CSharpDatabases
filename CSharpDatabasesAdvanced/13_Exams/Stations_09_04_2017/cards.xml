@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Cards>
+  <Card name="George Powell" type="Debilitated">
+    <Tickets>
+      <Ticket>
+        <OriginStation>Sofia</OriginStation>
+        <DestinationStation>Varna</DestinationStation>
+        <DepartureTime>5/24/2017 12:00:00 PM</DepartureTime>
+      </Ticket>
+      <Ticket>
+        <OriginStation>Sofia</OriginStation>
+        <DestinationStation>Sagay</DestinationStation>
+        <DepartureTime>12/2/2016 12:20:00 PM</DepartureTime>
+      </Ticket>
+    </Tickets>
+  </Card>
+  <Card name="Henry Moreno" type="Debilitated">
+    <Tickets>
+      <Ticket>
+        <OriginStation>Ajjah</OriginStation>
+        <DestinationStation>San Isidro</DestinationStation>
+        <DepartureTime>4/2/2016 12:33:00 PM</DepartureTime>
+      </Ticket>
+    </Tickets>
+  </Card>
+</Cards>

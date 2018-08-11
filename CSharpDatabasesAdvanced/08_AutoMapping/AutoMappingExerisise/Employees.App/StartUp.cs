@@ -36,25 +36,21 @@ namespace Employees.App
 
             //services.AddAutoMapper(cfg => cfg.AddProfile<ProfileMapping>());
 
-            var mapper = CreateConfiguration().CreateMapper();
-
-            var config = CreateConfiguration();
+            var mapper = CreateConfiguration();
 
             services.AddSingleton<IMapper>(mapper);
-
-            services.AddSingleton<IConfigurationProvider>(config);
 
             var provider = services.BuildServiceProvider();
 
             return provider;
         }
 
-        private static IConfigurationProvider CreateConfiguration()
+        private static IMapper CreateConfiguration()
         {
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(typeof(ProfileMapping));
-            });
+            }).CreateMapper();
 
             return config;
         }

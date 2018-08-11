@@ -30,7 +30,6 @@
                 throw new InvalidOperationException(ExeptionMessageHandler.InvalidCredentialsExeption);
             }
 
-
             this.userService.AddFriend(username1, username2);
 
             return string.Format(successMessage, username1, username2);

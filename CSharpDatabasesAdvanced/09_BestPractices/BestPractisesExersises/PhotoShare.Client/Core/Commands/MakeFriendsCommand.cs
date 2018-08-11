@@ -30,7 +30,7 @@ namespace PhotoShare.Client.Core.Commands
             }
 
             this.userService.AddFriend(username1, username2);
-            this.userService.AcceptFriend(username2, username1);
+            //this.userService.AcceptFriend(username2, username1);
 
             return string.Format(successMessage, username1, username2);
         }

@@ -17,12 +17,9 @@ namespace Employees.Services
 
         private IMapper mapper;
 
-        private IConfigurationProvider config;
-
-        public EmployeeService(IMapper mapper, IConfigurationProvider config)
+        public EmployeeService(IMapper mapper)
         {
             this.mapper = mapper;
-            this.config = config;
         }
 
         public TModel AddEmployee<TModel>(string firstName, string lastName, decimal salary)
@@ -80,7 +77,7 @@ namespace Employees.Services
                 var employeesDtos = db.Employees
                     .Where(e => e.Birthday != null)
                     .Where(e => (DateTime.Now - e.Birthday).Value.TotalDays > age * 365.2422)
-                    .ProjectTo<TModel>(config)
+                    .ProjectTo<TModel>(this.mapper.ConfigurationProvider)
                     .ToList();
 
                 return employeesDtos;
